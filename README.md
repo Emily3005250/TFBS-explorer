@@ -1,6 +1,6 @@
 # TFBS-explorer
 
-Explores the presence of transcription factor binding sites (TFBSs) in the promoter regions of human interferon-stimulated genes (ISGs). Specifically, it identifies and compares motif occurrences of IRF3, IRF7, and IRF9 using JASPAR motif profiles and Biopython-based scanning.
+Explores the presence of transcription factor binding sites (TFBSs) in the promoter regions of human interferon-stimulated genes (ISGs). It identifies and compares motif occurrences of IRF3, IRF7, and IRF9 using JASPAR motif profiles and Biopython-based scanning.
 
 ## Clone repository
 ```
@@ -11,27 +11,26 @@ git clone https://github.com/Sanghee-L/TFBS-explorer.git
 
 [TFBS_explorer](scripts/TFBS_explorer_human.ipynb)
 
-Script work flow
+This notebook performs the following steps:
 
-1. Retrieve the promoter sequence from ensembl using rest api
-2. Fetch the Trasncription Factor Binding Site sequence from JASPAR database using pyJASPAR
-3. Scan TFBS in the promoter sequences
-4. Output CSV with match positions
-5. Visualizes match counts (elbow plot)
+1. Retrieves the promoter sequences from ensembl using REST API
+2. Fetchs the Trasncription Factor Binding Site profile from JASPAR database by pyJASPAR
+3. Scans for TFBS motifs (IRF3, IRF7, IRF9) in the promoter sequences
+4. Output CSV files containing match positions
+5. Visualizes match counts across thresholds through elbow plot
 
 ## Installation
-To perfrom the script you need to install python libraries.
+To perfrom the analysis, install the required Python libraries:
 
 ```bash
 pip install requests biopython pyjaspar pandas matplotlib
 ```
 
 ## Inputs
-Genes that are regulated by IFN (Positive Control) and not regulated by IFN (Negative Control)
 
-human_IFN_up-regulation.csv 
+human_IFN_up-regulation.csv : List of genes that are upregulated by IFN (positive control)
 
-human_no_IFN-regulation.csv
+human_no_IFN-regulation.csv : List of genes not regulated by IFN (negative control)
 
 ## Outputs
 Promoter_sequence.fasta : 3000bp upstream DNA for each gene
@@ -40,4 +39,4 @@ motif_scan_positive_threshold_X.csv : scan results at PSSM thresholds from 1 to 
 
 motif_scan_negative_threshold_X.csv : scan results at PSSM thresholds from 1 to 10 : Hit number for motif
 
-Elbow plots of Transscription Factor Binding Site : To check the sensitivity
+Elbow plot : Visualise the relationship between pssm threshold and number of motif matches
