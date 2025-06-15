@@ -1,6 +1,6 @@
 # TFBS-explorer
 
-Exploration of Transcription Factor Binding Sites in promoter regions of IFN-stimulated genes
+Explores the presence of transcription factor binding sites (TFBSs) in the promoter regions of human interferon-stimulated genes (ISGs). Specifically, it identifies and compares motif occurrences of IRF3, IRF7, and IRF9 using JASPAR motif profiles and Biopython-based scanning.
 
 ## Scripts
 
