@@ -19,6 +19,5 @@ To perfrom the script you need to install python libraries.
 '''bash
 pip install request biopython pyjaspar pandas matplotlib
 '''
-<pre>
 
 ## Outputs
