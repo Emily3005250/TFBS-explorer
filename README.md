@@ -12,10 +12,11 @@ Exploration of Transcription Factor Binding Sites in promoter regions of IFN-sti
 4. Output CSV with match positions
 5. Visualizes match counts (elbow plot)
 
-## Dependencies
-- Python
-- BioPython
-- pyJASPAR
-- request
-- pandas
+## Installation
+To perfrom the script you need to install python libraries.
 
+'''bash
+pip install request biopython pyjaspar pandas matplotlib
+'''
+
+## Outputs
