@@ -15,8 +15,8 @@ Exploration of Transcription Factor Binding Sites in promoter regions of IFN-sti
 ## Installation
 To perfrom the script you need to install python libraries.
 
-'''bash
+```bash
 pip install requests biopython pyjaspar pandas matplotlib
-'''
+```
 
 ## Outputs
