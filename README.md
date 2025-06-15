@@ -2,11 +2,16 @@
 
 Explores the presence of transcription factor binding sites (TFBSs) in the promoter regions of human interferon-stimulated genes (ISGs). Specifically, it identifies and compares motif occurrences of IRF3, IRF7, and IRF9 using JASPAR motif profiles and Biopython-based scanning.
 
+## Clone repository
+```
+git clone https://github.com/Sanghee-L/TFBS-explorer.git
+```
+
 ## Scripts
 
 [TFBS_explorer](scripts/TFBS_explorer_human.ipynb)
 
-Work-Flow
+Script work flow
 
 1. Retrieve the promoter sequence from ensembl using rest api
 2. Fetch the Trasncription Factor Binding Site sequence from JASPAR database using pyJASPAR
