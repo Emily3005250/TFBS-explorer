@@ -28,7 +28,7 @@ def fetch_sequences(input_file, output_file ,upstream, downstream, species):
     headers = {"Accept": "application/json"}
 
     # write a csv file for promoter sequences
-    with open("output_file", "w", newline = "") as csvfile:
+    with open(output_file, "w", newline = "") as csvfile:
         writer = csv.writer(csvfile) 
         writer.writerow(['Species', 'Gene_Name', 'Ensembl_ID', 'Sequence']) # Set the header row for CSV file
         
