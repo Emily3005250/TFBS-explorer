@@ -30,7 +30,7 @@ def fetch_sequences(input_file, output_file ,upstream, downstream, species):
     # write a csv file for promoter sequences
     with open(output_file, "w", newline = "") as csvfile:
         writer = csv.writer(csvfile) 
-        writer.writerow(['Species', 'Gene_Name', 'Ensembl_ID', 'Sequence', 'Promoter_seq', 'Gene_seq', 'Downstream_seq']) # Set the header row for CSV file
+        writer.writerow(['Species', 'Gene_Name', 'Ensembl_ID', 'Sequence', 'Upstream_seq', 'Gene_seq', 'Downstream_seq']) # Set the header row for CSV file
         
         # Iterate through dict to get the sequece data from Ensembl
         for gene_name, gene_id in gene_ids.items():
@@ -48,17 +48,17 @@ def fetch_sequences(input_file, output_file ,upstream, downstream, species):
             sequence = data.get('seq', '') # extract the sequence from data in json format
             
             # Trimming the sequence by upstream (promoter), gene, downstream
-            promoter_seq = sequence[ :upstream]
+            upstream_seq = sequence[ :upstream]
             downstream_seq = sequence[-downstream:]
             gene_seq = sequence[upstream:-downstream]
             
             # Confirm the sequence length before writing CSV file
-            assert len(promoter_seq) == upstream, f"Promoter length mismatch for {gene_id}"
+            assert len(upstream_seq) == upstream, f"Promoter length mismatch for {gene_id}"
             assert len(downstream_seq) == downstream, f"Downstream length mismatch for {gene_id}"
             assert len(gene_seq) == (len(sequence) - upstream - downstream), f"Gene sequence length mismatch for {gene_id}"
 
             # Write the csv file with data
-            writer.writerow([species, gene_name, gene_id, sequence, promoter_seq, gene_seq ,downstream_seq])
+            writer.writerow([species, gene_name, gene_id, sequence, upstream_seq, gene_seq ,downstream_seq]) # Update the species from Ensembl database
         
     
     # Print to confirm
