@@ -30,7 +30,7 @@ def fetch_sequences(input_file, output_file ,upstream, downstream, species):
     # write a csv file for promoter sequences
     with open(output_file, "w", newline = "") as csvfile:
         writer = csv.writer(csvfile) 
-        writer.writerow(['Species', 'Gene_Name', 'Ensembl_ID', 'Sequence']) # Set the header row for CSV file
+        writer.writerow(['Species', 'Gene_Name', 'Ensembl_ID', 'Sequence', 'Promoter_seq', 'Gene_seq', 'Downstream_seq']) # Set the header row for CSV file
         
         # Iterate through dict to get the sequece data from Ensembl
         for gene_name, gene_id in gene_ids.items():
@@ -58,7 +58,8 @@ def fetch_sequences(input_file, output_file ,upstream, downstream, species):
             assert len(gene_seq) == (len(sequence) - upstream - downstream), f"Gene sequence length mismatch for {gene_id}"
 
             # Write the csv file with data
-            writer.writerow([species, gene_name, gene_id, promoter_seq, gene_seq ,downstream_seq])
+            writer.writerow([species, gene_name, gene_id, sequence, promoter_seq, gene_seq ,downstream_seq])
+        
     
     # Print to confirm
     print(f'Save sequence to {output_file}')
@@ -72,7 +73,7 @@ if __name__ == '__main__':
     parser.add_argument('-o', '--output_file', required=True, help='Set the output file name') # Provide the output file name
     parser.add_argument('-u', '--upstream', type=int, default=500, help='Set the length how long') # Provide the length we want to fetch
     parser.add_argument('-d', '--downstream', type=int, default=500, help='Set the length of downstream of gene') # Provide the length we want to fetch
-    parser.add_argument('-s', '--species', type=str, required=True, help='Species name') # Provide species information
+    #parser.add_argument('-s', '--species', type=str, required=True, help='Species name') # Provide species information
 
     # Set the args to use the argument with order (index)
     args = parser.parse_args()
