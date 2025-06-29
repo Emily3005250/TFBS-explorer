@@ -27,9 +27,9 @@ def scan_sequences(csv_file, motif_dict, threshold):
         next(csv_file)
         for line in csv_file:
             data = line.split(',')
-            gene_name = data[1]
-            gene_id = data[2]
-            sequence = data[3]
+            gene_name = data[0]
+            gene_id = data[1]
+            sequence = data[2]
 
             for tf, motif in motif_dict.items():
                 pssm_fwd = motif.pssm
