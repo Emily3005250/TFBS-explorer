@@ -1,5 +1,5 @@
 
-# === plot_tfbs_hits_manual.py ===
+# plot_tfbs_hits_manual.py
 
 import argparse
 import os
