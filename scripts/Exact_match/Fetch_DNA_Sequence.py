@@ -7,7 +7,7 @@ import csv
 import argparse
 import os
 
-def fetch_sequences(input_file, output_file ,upstream, downstream, species):
+def fetch_sequences(input_file, output_file ,upstream, downstream):
     # Set the dict to store gene_id and gene_name
     gene_ids = {}
 
@@ -73,9 +73,8 @@ if __name__ == '__main__':
     parser.add_argument('-o', '--output_file', required=True, help='Set the output file name') # Provide the output file name
     parser.add_argument('-u', '--upstream', type=int, default=500, help='Set the length how long') # Provide the length we want to fetch
     parser.add_argument('-d', '--downstream', type=int, default=500, help='Set the length of downstream of gene') # Provide the length we want to fetch
-    #parser.add_argument('-s', '--species', type=str, required=True, help='Species name') # Provide species information
 
     # Set the args to use the argument with order (index)
     args = parser.parse_args()
 
-    fetch_sequences(args.input_file, args.output_file, args.upstream, args.downstream, args.species)
+    fetch_sequences(args.input_file, args.output_file, args.upstream, args.downstream)

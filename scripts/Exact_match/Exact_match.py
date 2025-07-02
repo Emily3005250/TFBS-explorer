@@ -31,7 +31,7 @@ def scan_exact_motif(csv_file, motif, output_file):
                 end = match.end()
                 results.append([gene_name, gene_id, '-', start, end])
     
-    with open(output_file, 'r', newline="") as output:
+    with open(output_file, 'w', newline="") as output:
         writer = csv.writer(output)
         writer.writerow(['Gene_Name', 'Gene_ID', 'Strand', 'Start','End'])
         writer.writerows(results)
