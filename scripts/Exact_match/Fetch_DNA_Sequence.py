@@ -57,8 +57,19 @@ def fetch_sequences(input_file, output_file ,upstream, downstream):
             assert len(downstream_seq) == downstream, f"Downstream length mismatch for {gene_id}"
             assert len(gene_seq) == (len(sequence) - upstream - downstream), f"Gene sequence length mismatch for {gene_id}"
 
+            # Fetch cDNA and CDS
+            cdna_url = f'{server}/sequence/id/{gene_id}?type=cdna'
+            cdna = requests.get(cdna_url, headers=headers).json().get('seq','')
+
+            cds_url = f'{server}/sequence/id/{gene_id}?type=cds'
+            cds = requests.get(cds_url, headers=headers).json().get('seq','')
+
+            # Split the cDNA by CDS
+            ups_utr = cdna.split(cds)[0]
+            downs_utr = cdna.split(cds)[-1]
+
             # Write the csv file with data
-            writer.writerow([gene_name, gene_id, sequence, upstream_seq, gene_seq ,downstream_seq]) # Update the species from Ensembl database
+            writer.writerow([gene_name, gene_id, sequence, upstream_seq, gene_seq ,downstream_seq, ups_utr, cds, downs_utr]) # Update the species from Ensembl database
         
     
     # Print to confirm
