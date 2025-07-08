@@ -7,6 +7,27 @@ import csv
 import argparse
 import os
 
+# Function to retrieve the Transcript_ID
+def fetch_transcript_id(gene_id):
+    server = "https://rest.ensembl.org"
+    endpoint = f"/lookup/id/{gene_id}?expand=1"
+    headers = {"Accept": "application/json"}
+
+    r = requests.get(server + endpoint, headers=headers)
+    if not r.ok:
+        print(f"Error : Cannot fetch transcript ID for {gene_id}")
+        return None
+    
+    data = r.json()
+    transcripts = data.get("Transcript", [])
+
+    for tx in transcripts:
+        if tx.get("is_canonical"):
+            return tx["id"]
+        
+    return transcripts[0]["id"] if transcripts else None
+
+# Main function to make a CSV file (contains gene meta data)
 def fetch_sequences(input_file, output_file ,upstream, downstream):
     # Set the dict to store gene_id and gene_name
     gene_ids = {}
@@ -30,7 +51,7 @@ def fetch_sequences(input_file, output_file ,upstream, downstream):
     # write a csv file for promoter sequences
     with open(output_file, "w", newline = "") as csvfile:
         writer = csv.writer(csvfile) 
-        writer.writerow(['Gene_Name', 'Ensembl_ID', 'Sequence', 'Upstream_seq', 'Gene_seq', 'Downstream_seq']) # Set the header row for CSV file
+        writer.writerow(['Gene_Name', 'Ensembl_ID', 'Upstream_seq', 'Gene_seq', 'Downstream_seq', "5'_UTR", 'CDS', "3'_UTR"]) # Set the header row for output CSV file
         
         # Iterate through dict to get the sequece data from Ensembl
         for gene_name, gene_id in gene_ids.items():
@@ -57,19 +78,39 @@ def fetch_sequences(input_file, output_file ,upstream, downstream):
             assert len(downstream_seq) == downstream, f"Downstream length mismatch for {gene_id}"
             assert len(gene_seq) == (len(sequence) - upstream - downstream), f"Gene sequence length mismatch for {gene_id}"
 
-            # Fetch cDNA and CDS
-            cdna_url = f'{server}/sequence/id/{gene_id}?type=cdna'
-            cdna = requests.get(cdna_url, headers=headers).json().get('seq','')
+            # Get the Transcript_ID using Gene_ID
+            transcript_id = fetch_transcript_id(gene_id)
+            if not transcript_id:
+                print(f"Warning : No transcript found for {gene_id} : {gene_name}")
+                continue
 
-            cds_url = f'{server}/sequence/id/{gene_id}?type=cds'
-            cds = requests.get(cds_url, headers=headers).json().get('seq','')
 
-            # Split the cDNA by CDS
-            ups_utr = cdna.split(cds)[0]
-            downs_utr = cdna.split(cds)[-1]
+            # Set the URL for cDNA and CDS using Transcript ID
+            cdna_url = f'{server}/sequence/id/{transcript_id}?type=cdna'
+            cds_url = f"{server}/sequence/id/{transcript_id}?type=cds"
 
+            # Request to Ensembl to get the data for cDNA and CDS
+            cdna_data = requests.get(cdna_url, headers=headers)
+            cds_data = requests.get(cds_url, headers=headers)
+
+            if not cdna_data.ok or not cds_data.ok:
+                print(f"Warning : Failed to fetch sequences for {transcript_id}")
+                continue
+            
+            # Extract the sequence data
+            cdna = cdna_data.json().get("seq", "")
+            cds = cds_data.json().get("seq", "")
+
+            # Split the cDNA using CDS
+            if cds and cds in cdna:
+                utr5 = cdna.split(cds)[0]
+                utr3 = cdna.split(cds)[-1]
+            else:
+                utr5, utr3 = "",""
+                print(f"Warning : CDS not found inside cDNA for {gene_id}")
+            
             # Write the csv file with data
-            writer.writerow([gene_name, gene_id, sequence, upstream_seq, gene_seq ,downstream_seq, ups_utr, cds, downs_utr]) # Update the species from Ensembl database
+            writer.writerow([gene_name, gene_id, upstream_seq, gene_seq ,downstream_seq, utr5, cds, utr3]) # Write the rows in output CSV file
         
     
     # Print to confirm
