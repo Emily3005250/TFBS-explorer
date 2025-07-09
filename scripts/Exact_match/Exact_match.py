@@ -19,21 +19,42 @@ def scan_exact_motif(csv_file, motif, output_file):
             data = line.strip().split(',')
             gene_name = data[0]
             gene_id = data[1]
-            sequence = data[2]
+            upstream = data[2]
+            gene = data[3]
+            downstream = data[4]
+            utr5 = data[5]
+            cds = data[6]
+            utr3 = data[7]
 
-            for match in forward_pattern.finditer(sequence):
+            whole_sequence = upstream + gene + downstream # Contain Introns
+            transcript_sequence = utr5 + cds + utr3 # With out Introns
+
+            # Find matches in Genomic
+            for match in forward_pattern.finditer(whole_sequence):
                 start = match.start()
                 end = match.end()
-                results.append([gene_name, gene_id, '+', start, end])
+                results.append([gene_name, gene_id, '+', start, end, 'Genomic'])
 
-            for match in reverse_pattern.finditer(sequence):
+            for match in reverse_pattern.finditer(whole_sequence):
                 start = match.start()
                 end = match.end()
-                results.append([gene_name, gene_id, '-', start, end])
+                results.append([gene_name, gene_id, '-', start, end, 'Genomic'])
+
+            # Find matches in Transcript(mRNA)
+            for match in forward_pattern.finditer(transcript_sequence):
+                start = match.start()
+                end = match.end()
+                results.append([gene_name, gene_id, '+', start, end, 'Transcript'])
+
+            for match in reverse_pattern.finditer(transcript_sequence):
+                start = match.start()
+                end = match.end()
+                results.append([gene_name, gene_id, '-', start, end, 'Transcript'])
+            
     
     with open(output_file, 'w', newline="") as output:
         writer = csv.writer(output)
-        writer.writerow(['Gene_Name', 'Gene_ID', 'Strand', 'Start','End'])
+        writer.writerow(['Gene_Name', 'Gene_ID', 'Strand', 'Start','End', 'Sequence_Type'])
         writer.writerows(results)
 
 def main():
