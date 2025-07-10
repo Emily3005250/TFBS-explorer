@@ -51,7 +51,7 @@ def fetch_sequences(input_file, output_file ,upstream, downstream):
     # write a csv file for promoter sequences
     with open(output_file, "w", newline = "") as csvfile:
         writer = csv.writer(csvfile) 
-        writer.writerow(['Gene_Name', 'Ensembl_ID', 'Upstream_seq', 'Gene_seq', 'Downstream_seq', "5'_UTR", 'CDS', "3'_UTR", "Whole_Sequence"]) # Set the header row for output CSV file
+        writer.writerow(['Gene_Name', 'Ensembl_ID', 'Upstream_seq', 'Gene_seq', 'Downstream_seq', "5'_UTR", 'CDS', "3'_UTR"]) # Set the header row for output CSV file
         
         # Iterate through dict to get the sequece data from Ensembl
         for gene_name, gene_id in gene_ids.items():
@@ -110,7 +110,7 @@ def fetch_sequences(input_file, output_file ,upstream, downstream):
                 print(f"Warning : CDS not found inside cDNA for {gene_id}")
             
             # Write the csv file with data
-            writer.writerow([gene_name, gene_id, upstream_seq, gene_seq ,downstream_seq, utr5, cds, utr3, sequence]) # Write the rows in output CSV file
+            writer.writerow([gene_name, gene_id, upstream_seq, gene_seq ,downstream_seq, utr5, cds, utr3]) # Write the rows in output CSV file
         
     
     # Print to confirm

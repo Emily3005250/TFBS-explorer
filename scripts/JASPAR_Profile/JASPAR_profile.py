@@ -4,6 +4,9 @@ from pyjaspar import jaspardb
 from Bio import motifs
 from Bio import SeqIO
 from Bio.Seq import Seq
+import sys
+
+csv.field_size_limit(sys.maxsize)
 
 # Fetch motifs from JASPAR
 def fetch_motifs_from_jaspar(tf_list, release="JASPAR2024"):
@@ -29,29 +32,49 @@ def scan_sequences(csv_file, motif_dict, threshold):
             data = line.split(',')
             gene_name = data[0]
             gene_id = data[1]
-            sequence = data[2]
+            upstream = data[2]
+            gene = data[3]
+            downstream = data[4]
+            utr5 = data[5]
+            cds = data[6]
+            utr3 = data[7]
+
+            whole_sequence = upstream + gene + downstream # Contain Introns
+            transcript_sequence = utr5 + cds + utr3 # With out Introns - mRNA
 
             for tf, motif in motif_dict.items():
                 pssm_fwd = motif.pssm
                 motif_rev = motif.reverse_complement()
                 pssm_rev = motif_rev.pssm
                 motif_len = len(motif)
-
-                forward_matches = list(pssm_fwd.search(sequence, threshold=threshold)) # Scan Promoter sequences with forward motif patterns 
-                for pos, score in forward_matches: # Iterate through matches
+ 
+                for pos, score in pssm_fwd.search(whole_sequence, threshold = threshold): # Iterate through matches
                     start = pos 
                     end = pos + motif_len
-                    if start < 0 or end > len(sequence):
+                    if start < 0 or end > len(whole_sequence):
                         continue # Skip when start value is negative or end value is over the promoter sequence length.
-                    results.append([gene_name, gene_id, tf,"+", start, end]) # Add matched data into empty list to write CSV file
+                    results.append([gene_name, gene_id, tf,"+", start, end, 'Genomic']) # Add matched data into empty list to write CSV file
 
-                reverse_matches = list(pssm_rev.search(sequence, threshold=threshold))
-                for pos, score in reverse_matches:
+                for pos, score in pssm_rev.search(whole_sequence, threshold = threshold):
                     start = pos
                     end = pos + motif_len
-                    if start < 0 or end > len(sequence):
+                    if start < 0 or end > len(whole_sequence):
                         continue
-                    results.append([gene_name, gene_id, tf, '-', start, end])
+                    results.append([gene_name, gene_id, tf, '-', start, end, 'Genomic'])
+
+                for pos, score in pssm_fwd.search(transcript_sequence, threshold = threshold):
+                    start = pos
+                    end = pos + motif_len
+                    if start < 0 or end > len(transcript_sequence):
+                        continue
+                    results.append([gene_name, gene_id, '+', start, end, 'Transcript'])
+
+                for pos, score in pssm_rev.search(transcript_sequence, threshold = threshold):
+                    start = pos
+                    end = pos + motif_len
+                    if start < 0 or end > len(transcript_sequence):
+                        continue
+                    results.append([gene_name, gene_id, '-', start, end, 'Transscript'])
 
     return results
 
@@ -59,7 +82,7 @@ def scan_sequences(csv_file, motif_dict, threshold):
 def write_results_to_csv(results, output_file):
     with open(output_file, "w", newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(["Gene_Name", "Gene_ID", "TF", "Strand", "Start", "End"])
+        writer.writerow(["Gene_Name", "Gene_ID", "TF", "Strand", "Start", "End", "Sequence_Type"])
         writer.writerows(results)
     print(f"[INFO] Saved results to {output_file}")
 
