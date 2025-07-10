@@ -1,5 +1,5 @@
 
-#### Scanning Exact Matches in Promoter Region ####
+#### Fetch DNA sequence from Ensembl using REST API ####
 
 # Import the libraries
 import requests
@@ -27,7 +27,7 @@ def fetch_transcript_id(gene_id):
         
     return transcripts[0]["id"] if transcripts else None
 
-# Main function to make a CSV file (contains gene meta data)
+# Main function to make a CSV file
 def fetch_sequences(input_file, output_file ,upstream, downstream):
     # Set the dict to store gene_id and gene_name
     gene_ids = {}
@@ -45,8 +45,8 @@ def fetch_sequences(input_file, output_file ,upstream, downstream):
     print(f"Loaded {len(gene_ids)} genes from {input_file}.")
 
     # Set the server database to retrieve
-    server = "https://rest.ensembl.org"
-    headers = {"Accept": "application/json"}
+    server = "https://rest.ensembl.org" 
+    headers = {"Accept": "application/json"} # Set response data form
 
     # write a csv file for promoter sequences
     with open(output_file, "w", newline = "") as csvfile:
