@@ -91,8 +91,8 @@ def main():
     parser = argparse.ArgumentParser(description="Scan DNA sequences for TF motifs using JASPAR profile and SeqIO PSSMs.")
 
     parser.add_argument('--input', '-i', required=True, help="Input CSV file with promoter sequences.")
-    parser.add_argument('--tf', nargs='+', required=True, help="List of Transcription Factors to scan")
-    parser.add_argument('--threshold', '-t', type=float, default=7.0, help="PSSM match threshold")
+    parser.add_argument('--transcription_factor', '-t', nargs='+', required=True, help="List of Transcription Factors to scan")
+    parser.add_argument('--sensetivity', '-s', type=float, default=7.0, help="PSSM match threshold")
     parser.add_argument('--output', '-o', default="scan_results.csv", help="Output CSV filename")
     parser.add_argument('--jaspar_release', default="JASPAR2024", help="JASPAR version")
 
