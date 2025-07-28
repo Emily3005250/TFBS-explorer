@@ -2,7 +2,7 @@
 import os
 import argparse
 import pandas as pd
-import metplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 # This script generates an elbow plot of motif matches across thresholds for a given transcription factor (TF).
 def count_hits_across_thresholds(tf_name, pos_dir, neg_dir, thresholds):
@@ -10,8 +10,8 @@ def count_hits_across_thresholds(tf_name, pos_dir, neg_dir, thresholds):
     neg_hits = []
     # Check if the directories exist
     for threshold in thresholds:
-        pos_file = os.path.join(pos_dir, f'pos_scan_jaspar_{threshold}.0.csv')
-        neg_file = os.path.join(neg_dir, f'neg_scan_jaspar_{threshold}.0.csv')
+        pos_file = os.path.join(pos_dir, f'pos_jaspar_IRF3_{threshold}.0.csv')
+        neg_file = os.path.join(neg_dir, f'neg_jaspar_IRF3_{threshold}.0.csv')
         # Count the number of hits for each threshold
         if os.path.exists(pos_file):
             pos_df = pd.read_csv(pos_file)

@@ -23,14 +23,16 @@ def scan_exact_motif(input_file, motif, output_file):
     for idx, row in df.iterrows():
         gene_name = row['gene_name']
         gene_id = row['ensembl_id']
+        species = row['species']
 
         # Extract sequences from the row
-        upstream = row['Upstream']
-        gene = row['Gene_seq']
-        downstream = row['Downstream']
-        utr5 = row['5_UTR']
-        cds = row['CDS']
-        utr3 = row['3_UTR']
+        upstream = row['Upstream'] if pd.notna(row['Upstream']) else ''
+        gene = row['Gene_seq'] if pd.notna(row['Gene_seq']) else ''
+        downstream = row['Downstream'] if pd.notna(row['Downstream']) else ''
+        # Extract UTR and CDS sequences
+        utr5 = row['5_UTR'] if pd.notna(row['5_UTR']) else ''
+        cds = row['CDS'] if pd.notna(row['CDS']) else ''
+        utr3 = row['3_UTR'] if pd.notna(row['3_UTR']) else ''
 
         # Combine sequences to form genomic and transcript sequences
         genomic_sequence = upstream + gene + downstream # Contain Introns
@@ -45,13 +47,13 @@ def scan_exact_motif(input_file, motif, output_file):
             for match in forward_pattern.finditer(genomic_sequence):
                 start = match.start()
                 end = match.end()
-                results.append([gene_name, gene_id, '+', start, end, 'Genomic'])
+                results.append([species, gene_name, gene_id, '+', start, end, 'Genomic'])
 
             # Find all matches in reverse
             for match in reverse_pattern.finditer(genomic_sequence):
                 start = match.start()
                 end = match.end()
-                results.append([gene_name, gene_id, '-', start, end, 'Genomic'])
+                results.append([species, gene_name, gene_id, '-', start, end, 'Genomic'])
 
         ## Find matches in Transcript(mRNA)
         # Forward pattern matches
@@ -64,16 +66,16 @@ def scan_exact_motif(input_file, motif, output_file):
             for match in forward_pattern.finditer(transcript_sequence):
                 start = match.start()
                 end = match.end()
-                results.append([gene_name, gene_id, '+', start, end, 'Transcript'])
+                results.append([species, gene_name, gene_id, '+', start, end, 'Transcript'])
             
             # Find all matches for reverse
             for match in reverse_pattern.finditer(transcript_sequence):
                 start = match.start()
                 end = match.end()
-                results.append([gene_name, gene_id, '-', start, end, 'Transcript'])
+                results.append([species, gene_name, gene_id, '-', start, end, 'Transcript'])
         
     # Create a DataFrame from the results
-    columns = ['Gene_Name', 'Gene_ID', 'Strand', 'Start', 'End', 'Sequence_Type']
+    columns = ['Species','Gene_Name', 'Gene_ID', 'Strand', 'Start', 'End', 'Sequence_Type']
     results_df = pd.DataFrame(results, columns=columns)
 
     # Save to CSV
