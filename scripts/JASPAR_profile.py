@@ -27,6 +27,7 @@ def scan_sequences(csv_file, motif_dict, threshold):
         gene_name = row['gene_name']
         gene_id = row['ensembl_id']
         species = row['species']
+        transcript_id = row['Transcript_ID'] if 'Transcript_ID' in row else None
 
         # Extract sequences from the row
         upstream = row['Upstream'] if pd.notna(row['Upstream']) else ''
@@ -88,14 +89,14 @@ def scan_sequences(csv_file, motif_dict, threshold):
                 end = pos + motif_len
                 if start < 0 or end > len(transcript_sequence):
                     continue
-                results.append([species, gene_name, gene_id, '+', start, end, 'Transcript', upstream, gene, downstream, utr5, cds, utr3]) # Add matched data into empty list to write CSV file
+                results.append([species, gene_name, transcript_id, tf, '+', start, end, 'Transcript', upstream, gene, downstream, utr5, cds, utr3]) # Add matched data into empty list to write CSV file
             
             for pos, score in pssm_rev.search(transcript_sequence, threshold = threshold):
                 start = pos
                 end = pos + motif_len
                 if start < 0 or end > len(transcript_sequence):
                     continue
-                results.append([species, gene_name, gene_id, '-', start, end, 'Transcript', upstream, gene, downstream, utr5, cds, utr3]) # Add matched data into empty list to write CSV file
+                results.append([species, gene_name, transcript_id, tf, '-', start, end, 'Transcript', upstream, gene, downstream, utr5, cds, utr3]) # Add matched data into empty list to write CSV file
 
     return results
 

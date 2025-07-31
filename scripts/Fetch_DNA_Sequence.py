@@ -96,7 +96,7 @@ def fetch_sequences(input_file, output_file ,upstream, downstream):
             utr3 = cdna.split(cds)[-1]
         else:
             utr5, utr3 = "", ""
-            print(f"Warning : CDS not found inside cDNA for {gene_id}")
+            print(f"Warning : CDS not found inside cDNA for {gene_id} - {transcript_id}")
         
         # Store the UTR and CDS sequences in the DataFrame
         modified_df.at[idx, '5_UTR'] = utr5

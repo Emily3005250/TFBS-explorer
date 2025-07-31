@@ -129,7 +129,7 @@ def generate_lollipop_plot(df, output_dir, upstream=500, downstream=500):
             cds_bins = list(np.linspace(utr5_length, utr5_length + cds_length, cds_bin + 1))
 
             # Combine all bins
-            all_bins = utr5_bins + cds_bins + utr3_bins
+            all_bins = np.unique(utr5_bins + list(cds_bins) + utr3_bins)
 
             # Create bin columns and falls hits into bins
             # Calculate the mid-point of each bin for plotting
@@ -143,6 +143,11 @@ def generate_lollipop_plot(df, output_dir, upstream=500, downstream=500):
             tdf['stack_level'] = tdf.groupby(['bin_mid', 'Transcription_Factor']).cumcount()
             tdf['line_height'] = tdf['stack_level'] * 0.15 + 0.15
 
+            # Check if all line heights are NaN
+            if tdf['line_height'].isna().all():
+                print(f"Warning: all line heights are NaN for {species} - {gene_name} - {gene_id}. Skipping transcript plot.")
+                continue
+
             # Create the plot
             plt.figure(figsize=(10, 3))
 
@@ -151,9 +156,9 @@ def generate_lollipop_plot(df, output_dir, upstream=500, downstream=500):
                 plt.vlines(x=row['bin_mid'], ymin=0, ymax=row['line_height'], color=row['tf_color'])
                 plt.scatter(row['bin_mid'], row['line_height'], color=row['tf_color'], s=60, zorder=3)
             
-            plt.title(f"{species} - {gene_name} ({gene_id}) - Transcript Lollipop Plot")
-            plt.vlines(x= 0, ymin= 0, ymax= 0.3, color='black', linestyle='--') # Vertical line at CDS start
-            plt.xlabel('TFBS position relative to CDS Start') # X-axis label
+            plt.title(f"{species} - {gene_name} - Transcript Lollipop Plot")
+            plt.vlines(x= utr5_length, ymin= 0, ymax= 0.3, color='black', linestyle='--') # Vertical line at CDS start
+            plt.xlabel('TFBS position in Transcript - 5_UTR + CDS + 3_UTR') # X-axis label
             
             # Tick positions and labels for 5' UTR (every 100 bp)
             utr5_ticks = list(range(0, utr5_length + 100, 100)) # e.g., 0, 100, ..., 400
