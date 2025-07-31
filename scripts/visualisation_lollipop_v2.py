@@ -107,7 +107,7 @@ def generate_lollipop_plot(df, output_dir, upstream=500, downstream=500):
             
             # Save the plot
             plt.tight_layout()
-            output_file = os.path.join(output_dir, f"{species}_{gene_id}_genomic_lollipop.png")
+            output_file = os.path.join(output_dir, f"{species}_{gene_name}_{gene_id}_genomic_lollipop.png")
             plt.savefig(output_file, dpi=300)
             plt.close()
 
@@ -185,7 +185,7 @@ def generate_lollipop_plot(df, output_dir, upstream=500, downstream=500):
             
             # Save the plot
             plt.tight_layout()
-            output_file = os.path.join(output_dir, f"{species}_{gene_id}_transcript_lollipop.png")
+            output_file = os.path.join(output_dir, f"{species}_{gene_name}_{gene_id}_transcript_lollipop.png")
             plt.savefig(output_file, dpi=300)
             plt.close()
         print(f"Transcript lollipop plot saved to {output_file}")
