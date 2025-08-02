@@ -24,8 +24,8 @@ def fetch_transcript_id(gene_id):
     for tx in transcripts:
         if tx.get("is_canonical"):
             return tx["id"]
-        
-    return transcripts[0]["id"] if transcripts else None
+    print(f"Warning : No canonical transcript found for {gene_id}") # logger for further investigation
+    return None
 
 # Main function to make a CSV file (contains gene meta data)
 def fetch_sequences(input_file, output_file ,upstream, downstream):
