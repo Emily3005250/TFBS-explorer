@@ -4,7 +4,7 @@ import re
 from Bio.Seq import Seq
 import pandas as pd
 
-def scan_exact_motif(input_file, motif, output_file):
+def scan_exact_motif(input_file, tf, motif, output_file):
 
     # Prepare the regex patterns for forward and reverse motifs
     motif = motif.upper()
@@ -24,6 +24,7 @@ def scan_exact_motif(input_file, motif, output_file):
         gene_name = row['gene_name']
         gene_id = row['ensembl_id']
         species = row['species']
+        transcript_id = row['Transcript_ID'] if 'Transcript_ID' in row else None
 
         # Extract sequences from the row
         upstream = row['Upstream'] if pd.notna(row['Upstream']) else ''
@@ -47,13 +48,13 @@ def scan_exact_motif(input_file, motif, output_file):
             for match in forward_pattern.finditer(genomic_sequence):
                 start = match.start()
                 end = match.end()
-                results.append([species, gene_name, gene_id, '+', start, end, 'Genomic'])
+                results.append([species, gene_name, gene_id, tf, '+', start, end, 'Genomic'])
 
             # Find all matches in reverse
             for match in reverse_pattern.finditer(genomic_sequence):
                 start = match.start()
                 end = match.end()
-                results.append([species, gene_name, gene_id, '-', start, end, 'Genomic'])
+                results.append([species, gene_name, gene_id, tf, '-', start, end, 'Genomic'])
 
         ## Find matches in Transcript(mRNA)
         # Forward pattern matches
@@ -66,16 +67,16 @@ def scan_exact_motif(input_file, motif, output_file):
             for match in forward_pattern.finditer(transcript_sequence):
                 start = match.start()
                 end = match.end()
-                results.append([species, gene_name, gene_id, '+', start, end, 'Transcript'])
+                results.append([species, gene_name, transcript_id, tf, '+', start, end, 'Transcript'])
             
             # Find all matches for reverse
             for match in reverse_pattern.finditer(transcript_sequence):
                 start = match.start()
                 end = match.end()
-                results.append([species, gene_name, gene_id, '-', start, end, 'Transcript'])
+                results.append([species, gene_name, transcript_id, tf, '-', start, end, 'Transcript'])
         
     # Create a DataFrame from the results
-    columns = ['Species','Gene_Name', 'Gene_ID', 'Strand', 'Start', 'End', 'Sequence_Type']
+    columns = ['Species','Gene_Name', 'ID', 'Transcription_Factor', 'Strand', 'Start', 'End', 'Sequence_Type']
     results_df = pd.DataFrame(results, columns=columns)
 
     # Save to CSV
@@ -85,12 +86,13 @@ def main():
     parser = argparse.ArgumentParser(description='Scan exact match in DNA sequence')
 
     parser.add_argument('--input', '-i', required=True, help='Input CSV file - DNA sequence data for scanning')
+    parser.add_argument('--tf', '-t', required=True, help='Exact motif sequence to search for')
     parser.add_argument('--motif', '-m', required=True, help='Input motif sequence')
     parser.add_argument('--output', '-o', required=True, help='Assign the output file name')
 
     args = parser.parse_args()
 
-    scan_exact_motif(args.input, args.motif, args.output)
+    scan_exact_motif(args.input, args.tf, args.motif, args.output)
 
 if __name__ == '__main__':
     main()
