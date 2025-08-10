@@ -5,13 +5,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # This script generates an elbow plot of motif matches across thresholds for a given transcription factor (TF).
-def count_hits_across_thresholds(tf_name, pos_dir, neg_dir, thresholds):
+def count_hits_across_thresholds(tf_name, dir, thresholds):
     pos_hits = []
     neg_hits = []
     # Check if the directories exist
     for threshold in thresholds:
-        pos_file = os.path.join(pos_dir, f'pos_jaspar_IRF3_{threshold}.0.csv')
-        neg_file = os.path.join(neg_dir, f'neg_jaspar_IRF3_{threshold}.0.csv')
+        pos_file = os.path.join(dir, f'pos_jaspar_IRF9_{threshold}.0.csv')
+        neg_file = os.path.join(dir, f'neg_jaspar_IRF9_{threshold}.0.csv')
         # Count the number of hits for each threshold
         if os.path.exists(pos_file):
             pos_df = pd.read_csv(pos_file)
@@ -62,10 +62,9 @@ def main():
     parser = argparse.ArgumentParser(description='Generate an elbow plot of motif matches across thresholds for Transcription Factor.')
     
     # Required arguments
-    parser.add_argument('--tf', required=True, help='Transcription Factor name')
-    parser.add_argument('--pos_dir', required=True, help='Directory containing JSAPAR positive scan results')
-    parser.add_argument('--neg_dir', required=True, help='Directory containing JASPAR negative scan results')
-    parser.add_argument('--output', default='elbow_plot.png', help='Output file for the elbow plot')
+    parser.add_argument('--tf', '-t', required=True, help='Transcription Factor name')
+    parser.add_argument('--dir', '-d', required=True, help='Directory containing JSAPAR positive scan results')
+    parser.add_argument('--output', '-o',default='elbow_plot.png', help='Output file for the elbow plot')
     parser.add_argument('--min_thresh', type=int, default=1, help="Minimum PSSM threshold (default: 1)")
     parser.add_argument('--max_thresh', type=int, default=15, help="Maximum PSSM threshold (default: 15)")
 
@@ -79,7 +78,7 @@ def main():
     # Parse the command line arguments
     args = parser.parse_args()
     thresholds = range(args.min_thresh, args.max_thresh + 1)
-    pos_hits, neg_hits = count_hits_across_thresholds(args.tf, args.pos_dir, args.neg_dir, thresholds)
+    pos_hits, neg_hits = count_hits_across_thresholds(args.tf, args.dir, thresholds)
 
     # Generate the elbow plot
     # Call the plot_elbow function to create the elbow plot

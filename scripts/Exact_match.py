@@ -4,13 +4,13 @@ import re
 from Bio.Seq import Seq
 import pandas as pd
 
-def scan_exact_motif(input_file, tf, motif, output_file):
+def scan_exact_motif(input_file, motif_file, output_file):
 
-    # Prepare the regex patterns for forward and reverse motifs
-    motif = motif.upper()
-    forward_pattern = re.compile(motif)
-    reverse_motif = str(Seq(motif).reverse_complement())
-    reverse_pattern = re.compile(reverse_motif)
+    # Load motifs for all TFs from the CSV file
+    motif_df = pd.read_csv(motif_file)
+    if motif_df.empty:
+        print("Error: Motif file is empty.")
+        return
 
     # Prepare the output list to store results
     # Each entry will be a list: [gene_name, gene_id, strand, start, end, sequence_type]
@@ -43,6 +43,27 @@ def scan_exact_motif(input_file, tf, motif, output_file):
         if not genomic_sequence:  # Check if genomic_sequence is empty
             print(f"Warning: Empty genomic sequence for {gene_name} ({gene_id})")
             continue
+        
+        for _, motif_row in motif_df.iterrows():
+            tf = motif_row['Transcription_Factor']
+            forward_motif = motif_row['exact_forward']
+            reverse_motif = motif_row['exact_reverse']
+
+            # Compile regex patterns for forward and reverse motifs
+            forward_pattern = re.compile(forward_motif)
+            reverse_pattern = re.compile(reverse_motif)
+
+            if forward_pattern.search(genomic_sequence) or reverse_pattern.search(genomic_sequence):
+                # Scan the matches forward pattern
+                for match in forward_pattern.finditer(genomic_sequence):
+                    start, end = match.start(), match.end()
+                    results.append([species, gene_name, gene_id, tf, '+', start, end, 'Genomic'])
+
+                # Scan the matches reverse pattern
+                for match in reverse_pattern.finditer(genomic_sequence):
+                    start, end = match.start(), match.end()
+                    results.append([species, gene_name, gene_id, tf, '-', start, end, 'Genomic'])
+
         if forward_pattern.search(genomic_sequence) or reverse_pattern.search(genomic_sequence):
             # Find all matches in forward
             for match in forward_pattern.finditer(genomic_sequence):
@@ -78,6 +99,7 @@ def scan_exact_motif(input_file, tf, motif, output_file):
     # Create a DataFrame from the results
     columns = ['Species','Gene_Name', 'ID', 'Transcription_Factor', 'Strand', 'Start', 'End', 'Sequence_Type']
     results_df = pd.DataFrame(results, columns=columns)
+    results_df = results_df.drop_duplicates()  # Remove duplicates if any
 
     # Save to CSV
     results_df.to_csv(output_file, index=False)
@@ -86,13 +108,12 @@ def main():
     parser = argparse.ArgumentParser(description='Scan exact match in DNA sequence')
 
     parser.add_argument('--input', '-i', required=True, help='Input CSV file - DNA sequence data for scanning')
-    parser.add_argument('--tf', '-t', required=True, help='Exact motif sequence to search for')
-    parser.add_argument('--motif', '-m', required=True, help='Input motif sequence')
+    parser.add_argument('--motif', '-m', required=True, help='Input motif sequence CSV file to scan')
     parser.add_argument('--output', '-o', required=True, help='Assign the output file name')
 
     args = parser.parse_args()
 
-    scan_exact_motif(args.input, args.tf, args.motif, args.output)
+    scan_exact_motif(args.input, args.motif, args.output)
 
 if __name__ == '__main__':
     main()

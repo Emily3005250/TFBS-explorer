@@ -72,14 +72,14 @@ def scan_sequences(csv_file, motif_dict, threshold):
                 end = pos + motif_len
                 if start < 0 or end > len(genomic_sequence):
                     continue # Skip when start value is negative or end value is over the promoter sequence length.
-                results.append([species, gene_name, gene_id, tf,"+", start, end, 'Genomic', upstream, gene, downstream, utr5, cds, utr3]) # Add matched data into empty list to write CSV file
+                results.append([species, gene_name, gene_id, tf,"+", start, end, 'Genomic']) # Add matched data into empty list to write CSV file
 
             for pos, score in pssm_rev.search(genomic_sequence, threshold = threshold):
                 start = pos
                 end = pos + motif_len
                 if start < 0 or end > len(genomic_sequence):
                     continue
-                results.append([species, gene_name, gene_id, tf, '-', start, end, 'Genomic', upstream, gene, downstream, utr5, cds, utr3])
+                results.append([species, gene_name, gene_id, tf, '-', start, end, 'Genomic'])
 
             # Scan transcript sequence
             # Search for matches in the transcript sequence using the forward and reverse PSSMs
@@ -89,20 +89,20 @@ def scan_sequences(csv_file, motif_dict, threshold):
                 end = pos + motif_len
                 if start < 0 or end > len(transcript_sequence):
                     continue
-                results.append([species, gene_name, transcript_id, tf, '+', start, end, 'Transcript', upstream, gene, downstream, utr5, cds, utr3]) # Add matched data into empty list to write CSV file
+                results.append([species, gene_name, transcript_id, tf, '+', start, end, 'Transcript']) # Add matched data into empty list to write CSV file
             
             for pos, score in pssm_rev.search(transcript_sequence, threshold = threshold):
                 start = pos
                 end = pos + motif_len
                 if start < 0 or end > len(transcript_sequence):
                     continue
-                results.append([species, gene_name, transcript_id, tf, '-', start, end, 'Transcript', upstream, gene, downstream, utr5, cds, utr3]) # Add matched data into empty list to write CSV file
+                results.append([species, gene_name, transcript_id, tf, '-', start, end, 'Transcript']) # Add matched data into empty list to write CSV file
 
     return results
 
 # Write CSV
 def write_results_to_csv(results, output_file):
-    columns = ['Species','Gene_Name', 'Gene_ID', 'Transcription_Factor', 'Strand', 'Start', 'End', 'Sequence_Type', 'Upstream', 'Gene_Sequence', 'Downstream', '5_UTR', 'CDS', '3_UTR']
+    columns = ['Species','Gene_Name', 'Gene_ID', 'Transcription_Factor', 'Strand', 'Start', 'End', 'Sequence_Type']
     results_df = pd.DataFrame(results, columns=columns)
     results_df.to_csv(output_file, index=False)
     print(f"Results saved to {output_file}")

@@ -45,8 +45,8 @@ def scan_with_regex(input_file, motif_file, output_file):
 
         for _, motif_row in motif_df.iterrows():
             tf = motif_row['Transcription_Factor']
-            forward_motif = motif_row['Forward_Motif']
-            reverse_motif = motif_row['Reverse_Motif']
+            forward_motif = motif_row['regex_forward']
+            reverse_motif = motif_row['regex_reverse']
 
             # Compile regex patterns for forward and reverse motifs
             forward_pattern = re.compile(forward_motif)
@@ -79,6 +79,7 @@ def scan_with_regex(input_file, motif_file, output_file):
     # Create a DataFrame from the results
     columns = ['Species','Gene_Name', 'ID', 'Transcription_Factor','Strand', 'Start', 'End', 'Sequence_Type']
     results_df = pd.DataFrame(results, columns=columns)
+    results_df = results_df.drop_duplicates()  # Remove duplicates if any
 
     # Save to CSV
     results_df.to_csv(output_file, index=False)
