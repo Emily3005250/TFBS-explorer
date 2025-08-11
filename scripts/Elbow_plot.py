@@ -10,8 +10,8 @@ def count_hits_across_thresholds(tf_name, dir, thresholds):
     neg_hits = []
     # Check if the directories exist
     for threshold in thresholds:
-        pos_file = os.path.join(dir, f'pos_jaspar_IRF9_{threshold}.0.csv')
-        neg_file = os.path.join(dir, f'neg_jaspar_IRF9_{threshold}.0.csv')
+        pos_file = os.path.join(dir, f'pos_jaspar_{tf_name}_{threshold}.0.csv')
+        neg_file = os.path.join(dir, f'neg_jaspar_{tf_name}_{threshold}.0.csv')
         # Count the number of hits for each threshold
         if os.path.exists(pos_file):
             pos_df = pd.read_csv(pos_file)

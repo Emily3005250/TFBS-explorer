@@ -114,8 +114,8 @@ if __name__ == '__main__':
     ## Add argumentn to parser
     parser.add_argument('-i', '--input_file', required=True, help='Input CSV file with gene information') # Provide the input file name
     parser.add_argument('-o', '--output_file', required=True, help='Set the output file name') # Provide the output file name
-    parser.add_argument('-u', '--upstream', type=int, default=500, help='Set the length how long') # Provide the length we want to fetch
-    parser.add_argument('-d', '--downstream', type=int, default=500, help='Set the length of downstream of gene') # Provide the length we want to fetch
+    parser.add_argument('-u', '--upstream', type=int, default=3000, help='Set the length how long') # Provide the length we want to fetch
+    parser.add_argument('-d', '--downstream', type=int, default=3000, help='Set the length of downstream of gene') # Provide the length we want to fetch
 
     # Set the args to use the argument with order (index)
     args = parser.parse_args()
