@@ -64,7 +64,7 @@ def generate_lollipop_plots(match_file, seq_file, output_dir, upstream, downstre
         tick_locs = [-upstream_len, 0, upstream_len + gene_len + downstream_len]
         tick_labels = [f'-{upstream_len}','+1', str(total_len - upstream_len)]
         plt.xticks(tick_locs, tick_labels, rotation=45)
-        #plt.text(0, 0.02, '+1', transform=plt.gca().get_xaxis_transform(), ha='center', va='bottom', fontsize=10)
+        plt.text(0, 0.02, '+1', transform=plt.gca().get_xaxis_transform(), ha='center', va='bottom', fontsize=10)
 
         # Vertical lines for gene start and gene end
         plt.axvline(x=0, color='black', linestyle='--', linewidth=1, ymin=0, ymax=0.5/1.5)
