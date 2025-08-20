@@ -12,25 +12,25 @@ def generate_lollipop_plots(match_file, seq_file, output_dir, upstream, downstre
     seq_df = pd.read_csv(seq_file)
 
     # Filter to genomic only
-    match_df = match_df[match_df['Sequence_Type'] == 'Genomic']
+    gdf = match_df[match_df['Sequence_Type'] == 'Genomic']
 
     # Assign colors and heights for transcription factors
-    unique_tfs = match_df['Transcription_Factor'].unique()
+    unique_tfs = gdf['Transcription_Factor'].unique()
     cmap = plt.get_cmap('Set1')
     colors = [cmap(i) for i in range(len(unique_tfs))]
     tf_colors = dict(zip(unique_tfs, colors))
     heights = np.linspace(0.15, 0.15*len(unique_tfs), len(unique_tfs))
     tf_height = dict(zip(unique_tfs, heights))
 
-    match_df['Color'] = match_df['Transcription_Factor'].map(tf_colors)
-    match_df['line_height'] = match_df['Transcription_Factor'].map(tf_height)
+    gdf['Color'] = gdf['Transcription_Factor'].map(tf_colors)
+    gdf['line_height'] = gdf['Transcription_Factor'].map(tf_height)
 
     # Ensure the output directory exists
     os.makedirs(output_dir, exist_ok=True)
 
     # Loop through genes
-    for gene_name in match_df['Gene_Name'].unique():
-        df = match_df[match_df['Gene_Name'] == gene_name].copy()
+    for gene_name in gdf['Gene_Name'].unique():
+        df = gdf[gdf['Gene_Name'] == gene_name].copy()
         seq_row = seq_df[seq_df['gene_name'] == gene_name]
 
         if seq_row.empty:
@@ -127,14 +127,14 @@ def generate_lollipop_plots(match_file, seq_file, output_dir, upstream, downstre
             plt.ylim(0, 1.5)
             plt.xlabel('TFBS Position in Transcript (bp)')
             plt.xlim(0, transcript_total_len)
-            tick_locs = [0, CDS_len, transcript_total_len]
-            tick_labels = ['+1', str(CDS_len), str(transcript_total_len)]
+            tick_locs = [0, transcript_total_len]
+            tick_labels = ['+1', str(transcript_total_len)]
             plt.xticks(tick_locs, tick_labels, rotation=45)
             plt.text(0, 0.02, '+1', transform=plt.gca().get_xaxis_transform(), ha='center', va='bottom', fontsize=10)
 
             # Vertical lines for CDS start and end
             plt.axvline(x=transcript_total_len - (CDS_len + UTR3_len) , color='black', linestyle='--', linewidth=1, ymin=0, ymax=0.5/1.5)
-            plt.axvline(x=UTR5_len + CDS_len, color='black', linestyle='--', linewidth=1, ymin=0, ymax=0.5/1.5)
+            plt.axvline(x=CDS_len, color='black', linestyle='--', linewidth=1, ymin=0, ymax=0.5/1.5)
 
             # Legend
             legend_handles = [mpatches.Patch(color=color, label=tf) for tf, color in tf_colors_tdf.items()]
