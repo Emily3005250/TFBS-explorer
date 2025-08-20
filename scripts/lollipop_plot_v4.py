@@ -84,6 +84,73 @@ def generate_lollipop_plots(match_file, seq_file, output_dir, upstream, downstre
         plt.savefig(output_path, format='svg', bbox_inches='tight')
         plt.close()
 
+
+    tdf = match_df[match_df['Sequence_Type'] == 'Transcript'].copy()
+    if not tdf.empty:
+
+        unique_tfs_tdf = tdf['Transcription_Factor'].unique()
+        cmap_tdf = plt.get_cmap('Set1')
+        colors_tdf = [cmap_tdf(i) for i in range(len(unique_tfs_tdf))]
+        tf_colors_tdf = dict(zip(unique_tfs_tdf, colors_tdf))
+        heights_tdf = np.linspace(0.15, 0.15*len(unique_tfs_tdf), len(unique_tfs_tdf))
+        tf_height_tdf = dict(zip(unique_tfs_tdf, heights_tdf))
+
+        tdf['Color_T'] = tdf['Transcription_Factor'].map(tf_colors_tdf)
+        tdf['line_height_T'] = tdf['Transcription_Factor'].map(tf_height_tdf)
+
+        os.makedirs(output_dir, exist_ok=True)
+
+        for gene_name in tdf['Gene_Name'].unique():
+            df = tdf[tdf['Gene_Name'] == gene_name].copy()
+            seq_row = seq_df[seq_df['gene_name'] == gene_name]
+
+            if seq_row.empty:
+                continue
+
+            # Get sequence lengths
+            UTR5_len = len(str(seq_row.iloc[0]['5_UTR']))
+            CDS_len = len(str(seq_row.iloc[0]['CDS']))
+            UTR3_len = len(str(seq_row.iloc[0]['3_UTR']))
+            transcript_total_len = UTR5_len + CDS_len + UTR3_len
+            
+            plt.figure(figsize=(9, 4))
+
+            for _, row in df.iterrows():
+                plt.vlines(row['Start'], 0, row['line_height_T'], color=row['Color_T'])
+
+            plt.scatter(df['Start'], df['line_height_T'], color=df['Color_T'], s=60, zorder=3, alpha=0.8)
+            # Labels and title
+            species = seq_row.iloc[0]['species']
+            transcript_id = seq_row.iloc[0]['ensembl_id']
+            plt.title(f'Lollipop Plot {species} - {gene_name} ({transcript_id})')
+            plt.yticks([])
+            plt.ylim(0, 1.5)
+            plt.xlabel('TFBS Position in Transcript (bp)')
+            plt.xlim(0, transcript_total_len)
+            tick_locs = [0, CDS_len, transcript_total_len]
+            tick_labels = ['+1', str(CDS_len), str(transcript_total_len)]
+            plt.xticks(tick_locs, tick_labels, rotation=45)
+            plt.text(0, 0.02, '+1', transform=plt.gca().get_xaxis_transform(), ha='center', va='bottom', fontsize=10)
+
+            # Vertical lines for CDS start and end
+            plt.axvline(x=transcript_total_len - (CDS_len + UTR3_len) , color='black', linestyle='--', linewidth=1, ymin=0, ymax=0.5/1.5)
+            plt.axvline(x=UTR5_len + CDS_len, color='black', linestyle='--', linewidth=1, ymin=0, ymax=0.5/1.5)
+
+            # Legend
+            legend_handles = [mpatches.Patch(color=color, label=tf) for tf, color in tf_colors_tdf.items()]
+            plt.legend(handles=legend_handles, title='Transcription Factors', fontsize='small', loc='upper left')
+
+            # Aesthetics
+            plt.gca().spines['right'].set_visible(False)
+            plt.gca().spines['top'].set_visible(False)
+
+            # Save and close
+            output_path = os.path.join(output_dir, f'{gene_name}_tfbs_positions_lollipop_plot_transcript.svg')
+            plt.tight_layout()
+            plt.savefig(output_path, format='svg', bbox_inches='tight')
+            plt.close()
+
+
 def main():
     parser = argparse.ArgumentParser(description="Generate lollipop plots of TFBSs from motif scanning results.")
     parser.add_argument("-m", "--match_file", required=True, help="CSV file from Pipeline 2 TFBS scanning (e.g. pos_jaspar.csv)")
