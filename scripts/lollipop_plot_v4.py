@@ -11,14 +11,16 @@ def generate_lollipop_plots(match_file, seq_file, output_dir, upstream, downstre
     match_df = pd.read_csv(match_file)
     seq_df = pd.read_csv(seq_file)
 
+    tf_order = ["IRF3", "IRF7", "IRF9"]
+    camp = plt.get_cmap('Set1')
+    tf_pallet = [camp(i) for i in range(len(tf_order))]
+    tf_colors = dict(zip(tf_order, tf_pallet))
+
     # Filter to genomic only
     gdf = match_df[match_df['Sequence_Type'] == 'Genomic']
 
     # Assign colors and heights for transcription factors
     unique_tfs = gdf['Transcription_Factor'].unique()
-    cmap = plt.get_cmap('Set1')
-    colors = [cmap(i) for i in range(len(unique_tfs))]
-    tf_colors = dict(zip(unique_tfs, colors))
     heights = np.linspace(0.15, 0.15*len(unique_tfs), len(unique_tfs))
     tf_height = dict(zip(unique_tfs, heights))
 
@@ -84,18 +86,16 @@ def generate_lollipop_plots(match_file, seq_file, output_dir, upstream, downstre
         plt.savefig(output_path, format='svg', bbox_inches='tight')
         plt.close()
 
-
+    # ------- Lollipop plot for transcripts -------
+    # Filter to transcript data
     tdf = match_df[match_df['Sequence_Type'] == 'Transcript'].copy()
     if not tdf.empty:
 
         unique_tfs_tdf = tdf['Transcription_Factor'].unique()
-        cmap_tdf = plt.get_cmap('Set1')
-        colors_tdf = [cmap_tdf(i) for i in range(len(unique_tfs_tdf))]
-        tf_colors_tdf = dict(zip(unique_tfs_tdf, colors_tdf))
         heights_tdf = np.linspace(0.15, 0.15*len(unique_tfs_tdf), len(unique_tfs_tdf))
         tf_height_tdf = dict(zip(unique_tfs_tdf, heights_tdf))
 
-        tdf['Color_T'] = tdf['Transcription_Factor'].map(tf_colors_tdf)
+        tdf['Color_T'] = tdf['Transcription_Factor'].map(tf_colors)
         tdf['line_height_T'] = tdf['Transcription_Factor'].map(tf_height_tdf)
 
         os.makedirs(output_dir, exist_ok=True)
@@ -137,7 +137,7 @@ def generate_lollipop_plots(match_file, seq_file, output_dir, upstream, downstre
             plt.axvline(x=CDS_len, color='black', linestyle='--', linewidth=1, ymin=0, ymax=0.5/1.5)
 
             # Legend
-            legend_handles = [mpatches.Patch(color=color, label=tf) for tf, color in tf_colors_tdf.items()]
+            legend_handles = [mpatches.Patch(color=color, label=tf) for tf, color in tf_colors.items()]
             plt.legend(handles=legend_handles, title='Transcription Factors', fontsize='small', loc='upper left')
 
             # Aesthetics
