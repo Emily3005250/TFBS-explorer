@@ -81,7 +81,7 @@ def generate_subplots(match_file, seq_file, output_dir, gene_name, chunk_size):
             # Labels and title
             species = seq_row.iloc[0]['species']
             gene_id = seq_row.iloc[0]['ensembl_id']
-            plt.title(f'{species} - {gene_name} ({gene_id})\nChunk {i+1}: {start}-{end} bp')
+            plt.title(f'{species} - {gene_name} ({gene_id})\nChunk {i+1}: {start} to {end} bp')
             plt.yticks([])
             plt.ylim(0, 1.5)
             plt.xlabel('Position (bp)')
