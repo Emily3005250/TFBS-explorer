@@ -35,7 +35,7 @@ human_no_IFN-regulation.csv : List of genes not regulated by IFN (negative contr
 ## Example of Input file for module 1 (Fetch_DNA_Sequence.py)
 
 | Species       | Ensembl ID       | Gene       | Expression  | Orthologous Cluster ID |
-|----------------|----------------|----------------|
+|----------------|----------------|----------------|----------|-------------|
 | Homo sapiens   | ENSG00000157601   | MX1   | up_regulated | HS6198 |
 | Homo sapiens   | ENSG00000135114   | OASL   | up_regulated |HS1036 | 
 
