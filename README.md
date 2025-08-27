@@ -116,3 +116,18 @@ python3 Lollipop_plot.py -m pos_jaspar.csv -s human_IFN_up_regulation_seq.csv -d
 ```bash
 python3 sub_lollipop_plot.py -m pos_jaspar.csv -s human_IFN_up_regulation_seq.csv -d sub_lollipop_plot -g TRIM5 -c 1000
 ```
+
+## Python Libraries Used
+
+| Library             | Description                                       | Version   | Link                                                                 |
+|---------------------|---------------------------------------------------|-----------|----------------------------------------------------------------------|
+| `requests`          | HTTP requests to APIs (used to query Ensembl)     | 2.32.3    | [docs.python-requests.org](https://docs.python-requests.org)        |
+| `argparse`          | Handles command-line arguments                    | Built-in  | [argparse](https://docs.python.org/3/library/argparse.html)         |
+| `pandas`            | DataFrame and data handling                       | 2.3.0     | [pandas.pydata.org](https://pandas.pydata.org)                      |
+| `re`                | Regex operations                                  | Built-in  | [re module](https://docs.python.org/3/library/re.html)              |
+| `Bio` (Biopython)   | Sequence manipulation (e.g., reverse complement)  | 1.85      | [biopython.org](https://biopython.org)                              |
+| `pyjaspar`          | JASPAR motif access                               | 3.0.0     | [pyjaspar GitHub](https://github.com/asntech/pyjaspar)              |
+| `matplotlib.pyplot` | Data visualisation                                | 3.9.4     | [matplotlib.org](https://matplotlib.org)                            |
+| `matplotlib.patches`| Drawing elements (e.g., legends)                  | 3.9.4     | [matplotlib.org](https://matplotlib.org)                            |
+| `numpy`             | Array computation and numeric support             | 2.0.2     | [numpy.org](https://numpy.org)                                      |
+| `os`                | OS-level file handling                            | Built-in  | [os module](https://docs.python.org/3/library/os.html)              |
