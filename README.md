@@ -23,7 +23,7 @@ This notebook performs the following steps:
 To perfrom the analysis, install the required Python libraries:
 
 ```bash
-pip install requests biopython pyjaspar pandas matplotlib
+pip install requests biopython pyjaspar pandas matplotlib numpy 
 ```
 
 ## Inputs
@@ -31,6 +31,13 @@ pip install requests biopython pyjaspar pandas matplotlib
 human_IFN_up-regulation.csv : List of genes that are upregulated by IFN (positive control)
 
 human_no_IFN-regulation.csv : List of genes not regulated by IFN (negative control)
+
+## Example of Input file for module 1 (Fetch_DNA_Sequence.py)
+
+| Species       | Ensembl ID       | Gene       | Expression  | Orthologous Cluster ID |
+|----------------|----------------|----------------|
+| Homo sapiens   | ENSG00000157601   | MX1   | up_regulated | HS6198 |
+| Homo sapiens   | ENSG00000135114   | OASL   | up_regulated |HS1036 | 
 
 ## Outputs
 Promoter_sequence.fasta : 3000bp upstream DNA for each gene
