@@ -57,6 +57,7 @@ Module 1 (CSV file)
 
 
 Module 2 (CSV file)
+- tabular format csv file which contains matches coordinates and metadata
 
 | Species | Gene_Name | ID | Transcription_Factor | Strand | Start | End | Sequence_Type |
 |---------|-----------|----|----------------------|--------|-------|-----|---------------|
@@ -64,7 +65,6 @@ Module 2 (CSV file)
 | Homo sapience | COL23A1 | ENSG00000050767 | IRF9 | + | 194685 | 194695 | Genomic |
 | Homo sapience | STK4 | NSG00000101109 | IRF7 | - | 61826 | 61836 | Genomic |
 
-- tabular format csv file which contains matches coordinates and metadata
 Module 3 (SVG)
 
 - Lollipop plots to show the TFBS distribution
