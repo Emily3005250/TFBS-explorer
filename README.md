@@ -69,5 +69,41 @@ Module 2 (CSV file)
 Module 3 (SVG)
 
 - Lollipop plots to show the TFBS distribution
+
+
+
 - Zoomed (windowed) plots for detailed TFBS distribution and features
 
+
+
+
+## Example Command-Line Usage
+
+#### Module 1 (Fetch_DNA_Sequence.py)
+'''bash
+python3 Fetch_DNA_Sequence.py -i human_IFN_up-regulation.csv -o human_IFN_up_regulation_seq.csv -u 3000 -d 3000
+'''
+
+#### Module 2 (Scanning)
+
+- Exact_match.py
+'''bash
+python3 Exact_match.py -i ../output/human_IFN_up_regulation_seq.csv -m motif.seq -o pos_exact.csv
+'''
+
+- Regex_match.py
+'''bash
+python3 Regex_match.py -i ../output/human_IFN_up_regulation_seq.csv -m motif.seq -o pos_regex.csv
+'''
+
+- JASPAR_profile.py
+'''bash
+python3 JASPAR_profile.py -i ../output/human_IFN_up_regulation_seq.csv -t IRF3 IRF7 IRF9 -s 14.0 -o pos_jaspar.csv
+'''
+
+- Elbow_plot.py
+'''bash
+python3 Elbow_plot.py -t IRF3 -d ./outputs --min_thresh 1.0 --max_thresh 15.0 --pos_exact 20 --pos_regex 150 --neg_exact 5 --neg_regex 90
+'''
+
+#### Module 3 (Visualisation)
