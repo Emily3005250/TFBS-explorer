@@ -27,8 +27,8 @@ pip install requests biopython pyjaspar pandas matplotlib numpy
 - 'Elbow_plot.py' - Helps select the optimal threshold for PSSM matching
 
 ### Module 3: Visualisation
-'Lollipop_plot.py' - Creates lollipop plots of TFBS locations per gene
-'sub_lollipop_plot.py' - Generates zoomed-in, windowed TFBS plots for detailed inspection
+- 'Lollipop_plot.py' - Creates lollipop plots of TFBS locations per gene
+- 'sub_lollipop_plot.py' - Generates zoomed-in, windowed TFBS plots for detailed inspection
 
 
 
@@ -69,11 +69,11 @@ Module 2 (CSV file)
 Module 3 (SVG)
 
 - Lollipop plots to show the TFBS distribution
-
+![Example Lollipop Plot](/TFBS-explorer/outputs/lollipop_plot/TRIM5_tfbs_positions_lollipop_plot.svg)
 
 
 - Zoomed (windowed) plots for detailed TFBS distribution and features
-
+![Zoomed TFBS plot](/TFBS-explorer/outputs/sub_lollipop_plot/TRIM5_chunk_6.svg)
 
 
 
@@ -107,3 +107,12 @@ python3 Elbow_plot.py -t IRF3 -d ./outputs --min_thresh 1.0 --max_thresh 15.0 --
 ```
 
 #### Module 3 (Visualisation)
+- Lollipop_plot.py
+```bash
+python3 Lollipop_plot.py -m pos_jaspar.csv -s human_IFN_up_regulation_seq.csv -d lollipop_plots --upstream 3000 --downstream 3000
+```
+
+- sub_lollipop_plot.py
+```bash
+python3 sub_lollipop_plot.py -m pos_jaspar.csv -s human_IFN_up_regulation_seq.csv -d sub_lollipop_plot -g TRIM5 -c 1000
+```
