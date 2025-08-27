@@ -50,7 +50,14 @@ Visit the [Orthologous Clusters of Interferon-Stimulated Genes (ISGs)](https://i
 ## Outputs
 Module 1 (CSV file)
 - tabular format csv file which contains sequence data (upstream, gene, downstream, transcript)
+
+| Species | gene_Name | ensembl_ID | Upstream | Gene_seq | Downstream | Transcript_ID | 5_UTR | CDS | 3_UTR |
+|---------|-----------|------------|----------|----------|------------|---------------|-------|-----|-------|
+| Homo sapience | MFSD10 | ENSG00000109736 | 3kb seq | gene seq | 3kb seq | ENST00000355443 | 5' UTR seq | CDS seq | 3' UTR seq |
+
+
 Module 2 (CSV file)
+
 | Species | Gene_Name | ID | Transcription_Factor | Strand | Start | End | Sequence_Type |
 |---------|-----------|----|----------------------|--------|-------|-----|---------------|
 | Homo sapience | COL23A1 | ENSG00000050767 | IRF3 | + | 194685 | 194695 | Genomic |
@@ -59,7 +66,6 @@ Module 2 (CSV file)
 
 - tabular format csv file which contains matches coordinates and metadata
 Module 3 (SVG)
-
 
 - Lollipop plots to show the TFBS distribution
 - Zoomed (windowed) plots for detailed TFBS distribution and features
