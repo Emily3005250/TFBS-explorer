@@ -21,10 +21,10 @@ pip install requests biopython pyjaspar pandas matplotlib numpy
 - Fetches 3,000 bp upstream, full gene sequence, and 3,000 bp downstream sequence using the Ensemb REST API
 
 ### Module 2: TFBS Scanning
-'Exact_match.py' - Identifies perfect matches to core motifs
-'Regex_match.py' - Uses flexiblel pattern matching
-'JASPAR_profile.py' - Scans using PSSMs from the JASPAR 2024 database
-'Elbow_plot.py' - Helps select the optimal threshold for PSSM matching
+- 'Exact_match.py' - Identifies perfect matches to core motifs
+- 'Regex_match.py' - Uses flexiblel pattern matching
+- 'JASPAR_profile.py' - Scans using PSSMs from the JASPAR 2024 database
+- 'Elbow_plot.py' - Helps select the optimal threshold for PSSM matching
 
 ### Module 3: Visualisation
 'Lollipop_plot.py' - Creates lollipop plots of TFBS locations per gene
