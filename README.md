@@ -32,12 +32,14 @@ human_IFN_up-regulation.csv : List of genes that are upregulated by IFN (positiv
 
 human_no_IFN-regulation.csv : List of genes not regulated by IFN (negative control)
 
-## Example of Input file for module 1 (Fetch_DNA_Sequence.py)
+## Input file structure for module 1 (Fetch_DNA_Sequence.py) - positive control
 
 | Species       | Ensembl ID       | Gene       | Expression  | Orthologous Cluster ID |
 |----------------|----------------|----------------|----------|-------------|
 | Homo sapiens   | ENSG00000157601   | MX1   | up_regulated | HS6198 |
 | Homo sapiens   | ENSG00000135114   | OASL   | up_regulated |HS1036 | 
+
+Visit the [Orthologous Clusters of Interferon-Stimulated Genes (ISGs)](https://isg.data.cvr.ac.uk/) database for more information.
 
 ## Outputs
 Promoter_sequence.fasta : 3000bp upstream DNA for each gene
