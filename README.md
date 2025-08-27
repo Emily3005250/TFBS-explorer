@@ -69,11 +69,11 @@ Module 2 (CSV file)
 Module 3 (SVG)
 
 - Lollipop plots to show the TFBS distribution
-![Example Lollipop Plot](/TFBS-explorer/outputs/lollipop_plot/TRIM5_tfbs_positions_lollipop_plot.svg)
+![Example Lollipop Plot](outputs/lollipop_plot/TRIM5_tfbs_positions_lollipop_plot.svg)
 
 
 - Zoomed (windowed) plots for detailed TFBS distribution and features
-![Zoomed TFBS plot](/TFBS-explorer/outputs/sub_lollipop_plot/TRIM5_chunk_6.svg)
+![Zoomed TFBS plot](outputs/sub_lollipop_plot/TRIM5_chunk_6.svg)
 
 
 
