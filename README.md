@@ -74,7 +74,7 @@ Module 2 (CSV file)
 |---------|-----------|----|----------------------|--------|-------|-----|---------------|
 | Homo sapiens | COL23A1 | ENSG00000050767 | IRF3 | + | 194685 | 194695 | Genomic |
 | Homo sapiens | COL23A1 | ENSG00000050767 | IRF9 | + | 194685 | 194695 | Genomic |
-| Homo sapiens | STK4 | NSG00000101109 | IRF7 | - | 61826 | 61836 | Genomic |
+| Homo sapiens | STK4 | ENSG00000101109 | IRF7 | - | 61826 | 61836 | Genomic |
 
 
 Module 3 (SVG)
