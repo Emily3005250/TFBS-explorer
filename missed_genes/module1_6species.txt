@@ -1,0 +1,4 @@
+Error while genomic sequence retrieving for ENSG00000280755: 400
+Warning : Failed to fetch sequences for ENST00000652230
+Warning : Failed to fetch sequences for ENST00000292729
+Warning : Failed to fetch sequences for ENST00000391002
